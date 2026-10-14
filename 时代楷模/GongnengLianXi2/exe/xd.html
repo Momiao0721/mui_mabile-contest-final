@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">学习感言</h1>
+		</header>
+		
+		<div class="mui-content">
+			
+			<div id="GanYan" style="">
+				<!-- <div id="" style="padding: 10px; border-radius: 10px; background-color: #ffffd7;">
+					<h4>标题：</h4>
+					<h5>时间：</h5>
+					<h5>内容：</h5>
+					<hr >
+					<button type="button" style=" height: 50px;" class=" mui-btn-block"><img src="../IMG/2f03992397dda1443235049bf4b7d0a20cf4862b.jpg" style="height: 30px; width: 30px;" ShengCuButtonID=""><p style="position: absolute; right: 30%;bottom: 4px;">删除</p></button>
+					<button type="button" style=" height: 50px;" class=" mui-btn-block"><img src="../IMG/2f03992397dda1443235049bf4b7d0a20cf4862b.jpg" style="height: 30px; width: 30px;" XingZhengID=""><p style="position: absolute; right: 30%;bottom: 4px;">新增</p></button>
+				</div> -->
+				
+			</div>
+			
+		</div>
+		
+		<nav class="mui-bar mui-bar-tab" style="color: #ffffff;">
+			<button type="button" style="width: 130px; height: 50px; background-color: red;"><img src="../IMG/2f03992397dda1443235049bf4b7d0a20cf4862b.jpg" style="border-radius: 50px; position: absolute;left: 10%; height: 30px; width: 30px;" XingZhengID=""><p style="position: absolute; right: 30%;bottom: 4px; border-radius: 50px;">新增</p></button>
+		</nav>
+		<script src="../js/mui.js"></script>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+			    
+				function yeiMian(){
+					
+					mui.ajax(http + '/api/testimonials/list',{
+						data:{
+							
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+						
+						dataType:'json',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						timeout:10000,//超时时间设置为10秒；
+						success:function(data){
+							if (data.code == 200) {
+								var YeiMianHTML = '';
+								
+								for (var i = 0 ; i < data.rows.length ; i++) {
+								YeiMianHTML += `<div id="" style="padding: 10px; border-radius: 10px; background-color: #ffffd7;">
+					<h4>${data.rows[i].title}</h4>
+					<h5>${data.rows[i].createTime}</h5>
+					<h5>${data.rows[i].content}</h5>
+					<hr >
+					<button type="button" style=" height: 50px;" class=" mui-btn-block"><img src="../IMG/2f03992397dda1443235049bf4b7d0a20cf4862b.jpg" style="height: 30px; width: 30px;" ShengCuButtonID=""><p style="position: absolute; right: 30%;bottom: 4px;">删除</p></button>
+				</div>`
+								}
+								document.getElementById('GanYan').innerHTML = YeiMianHTML;
+							}
+						},
+						error:function(xhr,type,errorThrown){
+							
+						}
+					});
+					
+				}
+				yeiMian()
+				
+				
+			})
+		</script>
+	</body>
+
+</html>
