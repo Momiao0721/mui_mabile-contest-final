@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+		
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">数据分析</h1>
+		</header>
+		<div class="mui-content">
+			
+			
+			<div id="XiaoXingTu" style="height: 200px; width: 100%; color: ;"></div>
+			<div id="zeiXianTu" style="height: 200px; width: 100%; color: ;"></div>
+			<div id="BingTu" style="height: 200px; width: 100%;"></div>
+			
+			
+		</div>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/echarts.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				var TIaoXing = echarts.init(document.getElementById('XiaoXingTu'))
+				var ZeiXian = echarts.init(document.getElementById('zeiXianTu'))
+				var BingTu = echarts.init(document.getElementById('BingTu'))
+
+				mui.ajax(http + '/api/data/comment/list_1',{
+					data:{
+
+					},
+					headers:{
+						'Authorization':localStorage.getItem('token')
+					},
+
+					dataType:'json',
+					type:'GET',
+					timeout:10000,
+					success:function(res){
+						if (res.code != 200) return;
+
+							var d = res.data
+							var lineOption = {
+							    color:['#82ffd6','#ff6fe5'],
+							    legend: {
+							        data: ['女性评论数统计', '男性评论数统计'],
+							        left:"center",
+							    },
+							    grid:{
+							        show:true
+							    },
+							    xAxis: {
+							        type: 'category',
+							        data: d.name,
+							        splitLine:{ show: true },
+							    },
+							    yAxis: {
+							        type: 'value',
+							        min:0,
+							    },
+
+							    series: [{
+							        name: '女性评论数统计',
+							        data: d.woman,
+							        type: 'bar'
+							    },
+							    {
+							        name: '男性评论数统计',
+							        data: d.man,
+							        type: 'bar'
+							    }
+							  ]
+							}
+							TIaoXing.setOption(lineOption)
+
+					},
+					error:function(xhr,type,errorThrown){
+
+					}
+				});
+
+				mui.ajax(http + '/api/dataAnalysis/information/list_1',{
+					data:{
+
+					},
+					headers:{
+						'Authorization':localStorage.getItem('token')
+					},
+
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(res){
+
+						if(res.code != 200) return;
+
+						var d = res.data
+
+						var lineOption = {
+						    color:["#ff6fe5"],
+						    legend:{
+						        data:['每月用户购买快递数量'],
+						        left: 'center',
+						    },
+						    xAxis: {
+						        splitLine: {
+						            show: true
+						        },
+						        type: 'category',
+						        data: d.name
+						    },
+						    yAxis: {
+						        min: 0,
+						        type: 'value'
+						    },
+						    series: [{
+						        name:'每月用户购买快递数量',
+						        data: d.value,
+						        type: 'line'
+						    }]
+						}
+						ZeiXian.setOption(lineOption)
+					},
+					error:function(xhr,type,errorThrown){
+
+					}
+				});
+
+				mui.ajax(http + '/api/dataAnalysis/activity/list_1',{
+					data:{
+
+					},
+					headers:{
+						'Authorization':localStorage.getItem('token')
+					},
+
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(res){
+						var d = res.data;
+						var BingBing = [];
+
+						for (var i = 0; i < d.name.length; i++) {
+						    BingBing[i] = {
+						        name: d.name[i],
+						        value: d.count[i]
+						    }
+						}
+
+						var pieOption = {
+						    color: ['#ff6fe5', '#82ffd6','#c3ffb8','#75ffff','#5776ff'],
+						    tooltip: { trigger: 'item' },
+						    legend: { bottom: '0', left: 'center', icon: 'circle', data: d.name },
+						    series: [{
+						        type: 'pie',
+						        radius: '45%',
+						        label: { show: true, formatter: '{d}%' },
+						        data: BingBing
+						    }]
+						}
+
+						BingTu.setOption(pieOption)
+
+					},
+					error:function(xhr,type,errorThrown){
+
+					}
+				});
+
+			})
+		</script>
+	</body>
+
+</html>

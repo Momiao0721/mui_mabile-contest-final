@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">社区公告</h1>
+		</header>
+		<div class="mui-content">
+			
+			<div class="mui-slider">
+				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div id="" style="width: 80%; position: relative; left: 35px; border-radius: 50px; background-color: #0062CC;">
+						
+					<a class="mui-control-item" href="#item1">全部</a>
+					<a class="mui-control-item" href="#item2">未读</a>
+					<a class="mui-control-item" href="#item3">已读</a>
+					
+					</div>
+				</div>
+				
+					<div id="item1" class="mui-slider-item mui-control-content mui-active">
+						<ul class="mui-table-view" id="QuanBu" style="position: relative;top: 0px;">
+							
+							<div id="WeiDu">
+								
+								
+								
+							</div>
+							
+							
+						</ul>
+					</div>
+					<div id="item2" class="mui-slider-item mui-control-content">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">第2个选项卡子项</li>
+							<li class="mui-table-view-cell">第2个选项卡子项</li>
+						</ul>
+					</div>
+					<div id="item3" class="mui-slider-item mui-control-content">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell">第2个选项22卡子项</li>
+							<li class="mui-table-view-cell">第2个选项卡子项</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				function WeiDu(){
+
+					mui.ajax(http + '/api/community/community_notice/list',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							if (data.code == 200) {
+								var QuanBuHTML  = '';
+								for (var i = 0  ; i < data.rows.length ; i++) {
+
+								QuanBuHTML += `<div QuanBuID="${data.rows[i].id}" id="TiaoZUan" class="mui-media" style="background-color: #323232; border-radius: 20px;">
+									<h5 style="position: absolute; right: 5%; color: #000000;">${data.rows[i].noticeStatus}</h5>
+									${data.rows[i].noticeTitle}
+									<hr >
+									<h5 style="color: #000000;">${data.rows[i].contentNotice}</h5>
+
+									<hr >
+
+									<p>
+										<h5 style="position: absolute;right: 0; bottom: 1px;">23</h5>
+									<h5>${data.rows[i].createTime}</h5>
+									</p>
+
+								</div>
+								<br>
+								`
+								}
+								document.getElementById('WeiDu').innerHTML = QuanBuHTML;
+								var GongGaoList = document.querySelectorAll('#WeiDu .mui-media')
+
+								for (var j = 0 ; j < GongGaoList.length ; j++) {
+
+									(function(GongGao){
+
+										GongGao.addEventListener('tap',function(){
+
+											var id = this.getAttribute('QuanBuID')
+
+											console.log(id)
+
+											plus.storage.setItem('QuanBuID',id)
+
+											mui.openWindow('QuanBuHTML.html',{
+												extras:{
+													id:id
+												}
+											})
+
+										})
+
+									})(GongGaoList[j])
+
+								}
+
+							}
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				WeiDu()
+			})
+		</script>
+	</body>
+
+</html>
