@@ -27,7 +27,7 @@
 				</div>
 				
 					<div id="item1" class="mui-slider-item mui-control-content mui-active">
-						<ul class="mui-table-view" id="QuanBu" style="position: relative;top: 0px;">
+						<div class="mui-table-view" id="QuanBu" style="position: relative;top: 0px;">
 							
 							<div id="WeiDu">
 								
@@ -36,7 +36,7 @@
 							</div>
 							
 							
-						</ul>
+						</div>
 					</div>
 					<div id="item2" class="mui-slider-item mui-control-content">
 						<ul class="mui-table-view">
@@ -52,8 +52,6 @@
 					</div>
 				</div>
 			</div>
-			
-		</div>
 		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/http.js"></script>
 		<script type="text/javascript">
@@ -78,7 +76,7 @@
 								var QuanBuHTML  = '';
 								for (var i = 0  ; i < data.rows.length ; i++) {
 
-								QuanBuHTML += `<div QuanBuID="${data.rows[i].id}" id="TiaoZUan" class="mui-media" style="background-color: #323232; border-radius: 20px;">
+								QuanBuHTML += `<div QuanBuID="${data.rows[i].id}" id="TiaoZUan" class="mui-media" style="background-color: #b4b4b4; border-radius: 20px;">
 									<h5 style="position: absolute; right: 5%; color: #000000;">${data.rows[i].noticeStatus}</h5>
 									${data.rows[i].noticeTitle}
 									<hr >
@@ -86,10 +84,9 @@
 
 									<hr >
 
-									<p>
-										<h5 style="position: absolute;right: 0; bottom: 1px;">23</h5>
+									<div>
 									<h5>${data.rows[i].createTime}</h5>
-									</p>
+									</div>
 
 								</div>
 								<br>
@@ -105,8 +102,6 @@
 										GongGao.addEventListener('tap',function(){
 
 											var id = this.getAttribute('QuanBuID')
-
-											console.log(id)
 
 											plus.storage.setItem('QuanBuID',id)
 
@@ -125,7 +120,7 @@
 							}
 						},
 						error:function(xhr,type,errorThrown){
-
+							mui.toast('请求失败：' + type)
 						}
 					});
 

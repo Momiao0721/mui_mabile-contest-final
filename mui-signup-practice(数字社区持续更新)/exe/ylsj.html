@@ -67,13 +67,13 @@
 
 								var id = this.getAttribute('TiaoZuasId')
 
-								console.log(id)
-
 								plus.storage.setItem('TiaoZuasId',id)
 
-								mui.openWindow('XiangQingHTML.html',{
-									extras:{
-										id:id
+								mui.openWindow({
+									url: 'XiangQingHTML.html',
+									id: 'XiangQingHTML',
+									extras: {
+										id: id
 									}
 								})
 
@@ -84,7 +84,7 @@
 						}
 					},
 					error:function(xhr,type,errorThrown){
-
+						mui.toast('请求失败：' + type)
 					}
 				});
 

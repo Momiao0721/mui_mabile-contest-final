@@ -67,9 +67,9 @@
 							for (var i = 0 ; i < data.rows.length ; i++) {
 							TieZiList += `<li class="mui-table-view-cell mui-media mui-col-xs-6">
 				<a href="#">
-				<img src="${data.rows[i].imgUrl}" style="height: 200px; width: 100%;">
+				<img src="${httpimg + data.rows[i].imgUrl}" style="height: 200px; width: 100%;">
 				<h5 style="position: relative; left: -20px;">${data.rows[i].title}</h5>
-				<img src="${data.rows[i].userImgUrl}" style="height: 20px; width: 20px; position: relative;left: -60px; top: -23px;">
+				<img src="${httpimg + data.rows[i].userImgUrl}" style="height: 20px; width: 20px; position: relative;left: -60px; top: -23px;">
 
 				<h6 style="position: relative; left: 30px;">点赞:${data.rows[i].likeNum}</h6>
 				</a>
@@ -80,7 +80,7 @@
 						}
 					},
 					error:function(xhr,type,errorThrown){
-
+						mui.toast('请求失败：' + type)
 					}
 				});
 

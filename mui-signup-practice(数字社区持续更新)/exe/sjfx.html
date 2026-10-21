@@ -83,7 +83,7 @@
 
 					},
 					error:function(xhr,type,errorThrown){
-
+						mui.toast('请求失败：' + type)
 					}
 				});
 
@@ -130,7 +130,7 @@
 						ZeiXian.setOption(lineOption)
 					},
 					error:function(xhr,type,errorThrown){
-
+						mui.toast('请求失败：' + type)
 					}
 				});
 
@@ -146,6 +146,7 @@
 					type:'get',
 					timeout:10000,
 					success:function(res){
+						if (res.code != 200) return;
 						var d = res.data;
 						var BingBing = [];
 
@@ -163,7 +164,7 @@
 						    series: [{
 						        type: 'pie',
 						        radius: '45%',
-						        label: { show: true, formatter: '{d}%' },
+						        label: { show: true, formatter: '{b}: {d}%' },
 						        data: BingBing
 						    }]
 						}
@@ -172,7 +173,7 @@
 
 					},
 					error:function(xhr,type,errorThrown){
-
+						mui.toast('请求失败：' + type)
 					}
 				});
 

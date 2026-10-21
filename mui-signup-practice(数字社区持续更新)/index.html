@@ -12,18 +12,17 @@
 	</style>
 <body>
 	<header class="mui-bar mui-bar-nav" style="">
-		
 		<h1 class="mui-title">数字社区</h1>
 	</header>
 	<div class="mui-content">
 		
-		<form class="mui-input-group" style="position: absolute; width: 100%; background-color: ; padding: 5px; border-radius: 30px;">
+		<form class="mui-input-group" style="position: absolute; width: 100%; padding: 5px; border-radius: 30px;">
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear" placeholder="请输入账号" id="username">
 			</div>
 		</form>
 		<br>
-		<form class="mui-input-group" style="position: absolute; width: 100%; top: 100px; background-color: ; padding: 5px; border-radius: 30px;">
+		<form class="mui-input-group" style="position: absolute; width: 100%; top: 100px; padding: 5px; border-radius: 30px;">
 			<div class="mui-input-row">
 				<input type="password" class="mui-input-password" placeholder="请输入密码" id="password">
 			</div>
@@ -76,7 +75,7 @@
 					}
 				},
 				error:function(xhr,type,errorThrown){
-
+					mui.toast('请求失败：' + type)
 				}
 			});
 

@@ -7,7 +7,11 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../css/mui.css" rel="stylesheet" />
 	</head>
-
+<style type="text/css">
+	*{
+		/* overflow: hidden; */
+	}
+</style>
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
@@ -15,24 +19,19 @@
 		</header>
 		<div class="mui-content">
 			
-			<div id="XiangQing" style="padding: 5px;">
+			<div id="XiangQIng" style="padding: 5px; background-color: #ACACB4; border-radius: 30px;">
 				
-				
-				<br>
-				
-				<div id="QingLuen">
-					
+			</div>
 			
-				</div>
-				
-				<div id="">
-					
-					
-					
-				</div>
-				
-				
-				
+			<p style="position: relative; top: 2px; color: #000000; font-size: 20px;">评论:</p>
+			
+			<div id="XIngZheng">
+			<p id="XingZhengPingLuen" style="color: #0062CC;">
+				新增评论
+			</p>
+			</div>
+			
+			<div id="QingLuen" style="background-color: #B6B6B6; padding: 5px; position: relative; border-radius: 50px;">
 				
 			</div>
 			
@@ -43,15 +42,11 @@
 			mui.init()
 			mui.plusReady(function () {
 
-				var extra = plus.webview.currentWebview().extra || {}
-				var id = plus.storage.getItem('XiangQingID') || extra.id
-				console.log(id)
-				if(!id){
-					console.log('wt')
-					return;
-				}
+				var extra = plus.webview.currentWebview().extras || {}
 
-				function XiangQIng(){
+				var id = extra.id || plus.storage.getItem('TiaoZuasId')
+
+					function XinagQing(){
 
 						mui.ajax(http + '/api/community/friendly_neighborhood/' + id,{
 							data:{
@@ -62,34 +57,113 @@
 							},
 
 							dataType:'json',
-							type:'GET',
+							type:'get',
 							timeout:10000,
 							success:function(data){
 
 								if (data.code == 200) {
 
 									var XiangQingHTML = '';
-									XiangQingHTML += `<div style="border-radius: 15px; padding: 5px; background-color: #C8C7CC;">
-
-				<img src="${httpimg + data.data.imgUrl}" style="height: 200px; width: 100%;">
-
-				<div id="">
-					<h4>发布人:${data.data.publishName}</h4>
-					<h5>${data.data.publishTime}</h5>
-					<h5>${data.data.publishContent}</h5>
+									XiangQingHTML += `<div style="padding: 5px;">
+					<img src="${httpimg + data.data.imgUrl}" style="height: 200px; width: 100%; border-radius: 30px;">
 				</div>
-
+				<div style="position: relative;;">
+					<h4>${data.data.publishName}</h4>
+					<h5 style="color: #000000;">${data.data.publishTime}</h5>
+					<h5 style="color: #000000;">${data.data.title}</h5>
+					<h5 style="color: #000000;">${data.data.publishContent}</h5>
 				</div>`
-									document.getElementById('XiangQing').innerHTML = XiangQingHTML
+									document.getElementById('XiangQIng').innerHTML = XiangQingHTML;
 								}
 							},
 							error:function(xhr,type,errorThrown){
-
+								mui.toast('请求失败：' + type)
 							}
 						});
 
-				}
-				XiangQIng()
+					}
+
+					XinagQing()
+
+					function PingLuen(){
+
+						mui.ajax(http + '/api/community/friendly_neighborhood/' + id,{
+							data:{
+
+							},
+							headers:{
+								'Authorization':localStorage.getItem('token')
+							},
+
+							dataType:'json',
+							type:'get',
+							timeout:10000,
+							success:function(data){
+
+								if (data.code == 200) {
+
+									var PingLuenList = data.data.userComment;
+									var WingLuenHTML = '';
+
+									for (var j = 0 ; j < PingLuenList.length ; j++) {
+										var c = PingLuenList[j];
+									WingLuenHTML += `<div style="border-radius: 30px; background-color: #CCCCCC; margin-bottom: 10px;">
+
+					<div style="padding: 8px; background-color: #8F8F94; border-radius: 35px;">
+						<div style="display: flex; align-items: center;">
+							<img src="${httpimg + c.avater}" style="height: 24px; width: 24px; border-radius: 50%;">
+							<span style="margin-left: 8px; color: #000000;">${c.userName}</span>
+						</div>
+						<p style="margin: 4px 0; font-size: 12px; color: #333333;">时间:${c.pulishTime}</p>
+
+						<div style="padding: 8px; background-color: #8A6DE9; border-radius: 40px; color: #000000;">
+						${c.content}
+						</div>
+
+					</div>
+
+				</div>`
+									}
+
+									document.getElementById('QingLuen').innerHTML = WingLuenHTML
+								}
+
+							},
+							error:function(xhr,type,errorThrown){
+								mui.toast('请求失败：' + type)
+							}
+						});
+
+					}
+					PingLuen()
+
+					window.addEventListener('refresh', function () {
+						PingLuen()
+					})
+
+					mui('#XIngZheng').on('tap','#XingZhengPingLuen',function(){
+
+						mui.confirm('你确定新增评论么','新增评论',['取消','确认'],function (e) {
+
+							if (e.index == 1) {
+
+								mui.openWindow({
+									url: 'XiangZhengQinglUenHTML.html',
+									id: 'XiangZhengQinglUenHTML',
+									extras: {
+										id: id
+									}
+								})
+
+							} else{
+
+								mui.toast('你点击了取消')
+
+							}
+
+						},'div')
+
+					})
 
 			})
 		</script>

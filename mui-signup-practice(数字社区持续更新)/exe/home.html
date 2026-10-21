@@ -9,16 +9,13 @@
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" id="SengquID">
-			
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">首页</h1>
 		</header>
-		
 		<div class="mui-content">
 			
-			
-			<div id="slider" class="mui-slider" style="height: 200px; width: 100%;">
+			<div id="slider" class="mui-slider" >
 			  <div class="mui-slider-group mui-slider-loop" id="lbt1"></div>
-				
 				
 				
 				
@@ -31,34 +28,174 @@
 				
 			</div>
 			
-			<div id="TongZi" style="background-color: #ffff7f;">
-				
-				<p style="position: relative;top: 2px; color: #000000; padding: 5px;">第六次核酸检测
-				</p>
-			</div>
-			
 			
 			<ul class="mui-table-view mui-grid-view mui-grid-9" id="jgg">
+				
 			
 			
+			</ul>
 			
+			
+			<div id="hdList"
+				style="display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; gap: 10px; padding: 10px; -webkit-overflow-scrolling: touch;">
+				
+			</div>
+			
+			<div>
+				
+				<ul class="mui-table-view" id="ListList">
+				
+					
 				</ul>
-			
-	
-		
+				
+			</div>
 			
 		</div>
-		
-		
 		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../js/http.js"></script>
 		<script type="text/javascript">
 			mui.init()
 			mui.plusReady(function () {
 
-				function SenQuID(){
+				function LuenBuoTu(){
 
-					mui.ajax(http + '/api/community/community/1',{
+					mui.ajax(http + '/api/rotation/list',{
+						data:{
+							type:1
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+
+							if (data.code == 200) {
+								var lbtHTml = '';
+								var lbtXIa = '';
+
+								lbtHTml += `<div class="mui-slider-item mui-slider-item-duplicate">
+				  <a href="#">
+					<img src="${httpimg + data.rows[data.rows.length-1].advImg}" style="height: 200px; width: 100%;">
+				  </a>
+				</div>`
+
+				for (var i = 0 ; i < data.rows.length ; i++) {
+					lbtHTml += `<div class="mui-slider-item">
+				  <a href="#">
+					<img src="${httpimg + data.rows[i].advImg}" style="height: 200px; width: 100%;">
+				  </a>
+				</div>`
+
+				lbtXIa += `<div class="mui-indicator"></div>`
+				}
+
+				lbtHTml += `<div class="mui-slider-item mui-slider-item-duplicate">
+				  <a href="#">
+					<img src="${httpimg + data.rows[0].advImg}" style="height: 200px; width: 100%;">
+				  </a>
+				</div>`
+				document.getElementById('lbt1').innerHTML = lbtHTml;
+				document.getElementById('lbt2').innerHTML = lbtXIa;
+
+							}
+							mui('.mui-slider').slider({interval:3000})
+						},
+						error:function(xhr,type,errorThrown){
+							mui.toast('请求失败：' + type)
+						}
+					});
+
+				}
+				LuenBuoTu()
+
+				function jgg(){
+
+					var jggCSS = [{
+						name:'li_1',
+						id:'li_1',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					{
+						name:'li_2',
+						id:'li_2',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					{
+						name:'li_3',
+						id:'li_3',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					{
+						name:'li_4',
+						id:'li_4',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					{
+						name:'li_5',
+						id:'li_5',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					{
+						name:'li_6',
+						id:'li_6',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					{
+						name:'li_7',
+						id:'li_7',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					{
+						name:'li_8',
+						id:'li_8',
+						img:'../IMG/8cf2c9ca6c83a.jpg'
+					},
+					]
+					var jggHTML = '';
+					for (var i = 0 ; i < jggCSS.length ; i++) {
+
+						jggHTML += `<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+				<a href="#" id="${jggCSS[i].id}">
+					<img src="${jggCSS[i].img}" style="height: 50px; width: 50px; border-radius: 50px;">
+					<div class="mui-media-body">${jggCSS[i].name}</div>
+				</a>
+			</li>`
+
+					}
+					document.getElementById('jgg').innerHTML = jggHTML;
+					document.getElementById('li_1').addEventListener('tap',function(){
+						mui.openWindow('li_1.html')
+					});
+					document.getElementById('li_2').addEventListener('tap',function(){
+						mui.openWindow('li_2.html')
+					});
+					document.getElementById('li_3').addEventListener('tap',function(){
+						mui.openWindow('li_3.html')
+					});
+					document.getElementById('li_4').addEventListener('tap',function(){
+						mui.openWindow('li_4.html')
+					});
+					document.getElementById('li_5').addEventListener('tap',function(){
+						mui.openWindow('li_5.html')
+					});
+					document.getElementById('li_6').addEventListener('tap',function(){
+						mui.openWindow('li_6.html')
+					});
+					document.getElementById('li_7').addEventListener('tap',function(){
+						mui.openWindow('li_7.html')
+					});
+					document.getElementById('li_8').addEventListener('tap',function(){
+						mui.openWindow('li_8.html')
+					});
+				}
+				jgg()
+
+				 function List(){
+
+					mui.ajax(http + '/api/community/community-activity/activity-list',{
 						data:{
 
 						},
@@ -71,24 +208,30 @@
 						timeout:10000,
 						success:function(data){
 							if (data.code == 200) {
-								var DingBuHTML = ''
-								DingBuHTML += `<h1 class="mui-title">${data.data.name}</h1>`
-								document.getElementById('SengquID').innerHTML = DingBuHTML
+
+								var ListHTML = '';
+								for (var i = 0 ; i < data.rows.length; i++) {
+
+									ListHTML += `<div style="flex-shrink: 0; width: 140px; height: 150px; background-color: #ffffff; border-radius: 10px; overflow: hidden;">
+					<img src="${httpimg + data.rows[i].imgUrl}" style="width: 100%; height: 100px; object-fit: cover;">
+					<h4 style="margin: 5px; font-size: 14px;">${data.rows[i].title}</h4>
+				</div>`
+
+								}
+								document.getElementById('hdList').innerHTML = ListHTML
 							}
 						},
 						error:function(xhr,type,errorThrown){
-
+							mui.toast('请求失败：' + type)
 						}
 					});
+				 }
+					List()
 
-				}
-				SenQuID()
+				function YeiMian(){
 
-				function SoYeiLBT(){
-
-					mui.ajax(http + '/api/rotation/list',{
+					mui.ajax(http + '/api/community/community-activity/dynamic-list',{
 						data:{
-							type:1,
 
 						},
 						headers:{
@@ -99,131 +242,31 @@
 						type:'get',
 						timeout:10000,
 						success:function(data){
+							if (data.code == 200) {
 
-							if (data.code==200) {
-
-								var lbtHTML = '';
-								var lbtXia = '';
-								lbtHTML += `<div class="mui-slider-item mui-slider-item-duplicate">
-				  <a href="#">
-					<img src="${httpimg + data.rows[data.rows.length-1].advImg}">
-				  </a>
-				</div>`
-
-							for (var i = 0 ; i < data.rows.length ; i++) {
-								lbtHTML += `<div class="mui-slider-item">
-				  <a href="#">
-					<img src="${httpimg + data.rows[i].advImg}">
-				  </a>
-				</div>`
-								lbtXia += `<div class="mui-indicator"></div>`
-
-							}
-
-								lbtHTML += `<div class="mui-slider-item mui-slider-item-duplicate">
-				  <a href="#">
-					<img src="${httpimg + data.rows[0].advImg}">
-				  </a>
-				</div>`
-
-								document.getElementById('lbt1').innerHTML = lbtHTML;
-								document.getElementById('lbt2').innerHTML = lbtXia;
-
-								mui('.mui-slider').slider({ interval: 3000 })
+								var ListListHTML = ''
+								for (var i = 0 ;i < data.rows.length ; i++) {
+									ListListHTML += `<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" style="height: 100%;" src="${httpimg +  data.rows[i].imgUrl}" >
+							<div class="mui-media-body">
+								<h4>${data.rows[i].comDistance}</h4>
+								<h5>${data.rows[i].createTime}</h5>
+								<p class="mui-ellipsis">${data.rows[i].title}</p>
+							</div>
+						</a>
+					</li>`
+								}
+								document.getElementById('ListList').innerHTML = ListListHTML;
 							}
 						},
 						error:function(xhr,type,errorThrown){
-
+							mui.toast('请求失败：' + type)
 						}
 					});
 
 				}
-				SoYeiLBT()
-
-				function jgg(){
-
-					var jgg =[{
-						name:'开门',
-						id:'li_1',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					},
-					{
-						name:'我的房屋',
-						id:'li_2',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					},
-					{
-						name:'我的车位',
-						id:'li_3',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					},
-					{
-						name:'物业缴费',
-						id:'li_4',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					},
-					{
-						name:'扫码取件',
-						id:'li_5',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					},
-					{
-						name:'社区公告',
-						id:'li_6',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					},
-					{
-						name:'社区电话',
-						id:'li_7',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					},
-					{
-						name:'投诉建议',
-						id:'li_8',
-						img:'../IMG/4bc0706dd1a65.jpg'
-					}
-					]
-
-					var jggHTML = ''
-
-					for (var i = 0 ; i < jgg.length ; i++) {
-
-					jggHTML += `<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-2">
-				<a href="#" id="${jgg[i].id}">
-					<img src="${jgg[i].img}" style="height: 30px; width: 30px; border-radius: 50px;">
-					<div class="mui-media-body">${jgg[i].name}</div>
-				</a>
-			</li>`
-
-					}
-					document.getElementById('jgg').innerHTML = jggHTML
-					document.getElementById('li_1').addEventListener('tap',function(){
-						mui.openWindow('li_1.html')
-					})
-					document.getElementById('li_2').addEventListener('tap',function(){
-						mui.openWindow('li_2.html')
-					})
-					document.getElementById('li_3').addEventListener('tap',function(){
-						mui.openWindow('li_3.html')
-					})
-					document.getElementById('li_4').addEventListener('tap',function(){
-						mui.openWindow('li_4.html')
-					})
-					document.getElementById('li_5').addEventListener('tap',function(){
-						mui.openWindow('li_5.html')
-					})
-					document.getElementById('li_6').addEventListener('tap',function(){
-						mui.openWindow('li_6.html')
-					})
-					document.getElementById('li_7').addEventListener('tap',function(){
-						mui.openWindow('li_7.html')
-					})
-					document.getElementById('li_8').addEventListener('tap',function(){
-						mui.openWindow('li_8.html')
-					})
-				}
-				jgg()
-
+				YeiMian()
 			})
 		</script>
 	</body>

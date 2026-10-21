@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新增评论</h1>
+		</header>
+		<div class="mui-content">
+			
+		</div>
+		<div class="mui-content" style="padding: 10px;">
+			<textarea id="NeiRong" rows="5" placeholder="请输入评论内容"
+				style="width: 100%; border-radius: 10px; padding: 8px; font-size: 14px;"></textarea>
+			<button id="TiJiao" type="button" class="mui-btn mui-btn-block mui-btn-primary" style="margin-top: 15px;">
+				提交评论
+			</button>
+		</div>
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js"></script>
+		<script type="text/javascript">
+
+			mui.init({
+				beforeback: function () {
+					var opener = plus.webview.currentWebview().opener();
+					mui.fire(opener, 'refresh');
+					return true;
+				}
+			})
+
+			mui.plusReady(function () {
+
+				var extra = plus.webview.currentWebview().extra || {}
+				var id = extra.id || plus.storage.getItem('TiaoZuasId')
+
+				if (!id) {
+					mui.toast('没有拿到帖子ID')
+					return;
+				}
+
+				document.getElementById('TiJiao').addEventListener('tap', function () {
+
+					var content = document.getElementById('NeiRong').value
+
+					if (!content) {
+						mui.toast('请输入评论内容')
+						return
+					}
+
+					mui.ajax(http + '/api/community/friendly_neighborhood/add/comment', {
+						data:({
+							content: content,
+							neighborhoodId: id
+						}),
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': localStorage.getItem('token')
+						},
+						dataType: 'json',
+						type: 'post',
+						timeout: 10000,
+						success: function (res) {
+							if (res.code == 200) {
+								mui.toast('评论成功')
+								mui.back()
+
+							} else {
+								mui.toast(res.msg)
+							}
+						},
+						error:function (xhr, type, errorThrown){
+							mui.toast('请求失败：' + type)
+						}
+					})
+				})
+			})
+		</script>
+	</body>
+
+</html>
