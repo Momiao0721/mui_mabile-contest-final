@@ -1,0 +1,374 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav" id="XiaoQuID">
+			
+		</header>
+		
+		<div class="mui-content">
+			
+			<div id="slider" class="mui-slider" >
+			  <div class="mui-slider-group mui-slider-loop" id="lbt1"></div>
+				  
+				
+				
+				
+				
+			
+				
+			
+			  
+			  <div class="mui-slider-indicator" id="lbt2"></div>
+				
+			</div>
+			
+			
+			<div id="TongZhi" style="height: 32px; line-height: 32px; background-color: #f0d28a; overflow: hidden;"></div>
+			
+			<div id="">
+				
+				<ul class="mui-table-view mui-grid-view mui-grid-9" id="jgg">
+					
+				
+			
+				
+					</ul>
+				
+				
+			</div>
+			
+			
+			<div class="mui-ellipsis" id="SeiQuhUODong" style=" overflow-x: auto; font-weight: normal; display: flex;">
+				
+				
+			</div>
+			
+			<ul class="mui-table-view" id="DongTai">
+				
+				
+				
+			</ul>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" id="GengXinbg">更新</button>
+		</div>
+		<script src="../js/http.js"></script>
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				function XIaoQuID(){
+
+					mui.ajax(http + '/api/community/community/1',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							if (data.code == 200) {
+								var XIaoQuIDHTML = ''
+
+								XIaoQuIDHTML += `<h1 class="mui-title">${data.data.name}</h1>`
+
+								document.getElementById('XiaoQuID').innerHTML = XIaoQuIDHTML
+							}
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				XIaoQuID()
+
+				function HomeLBT(){
+
+					mui.ajax(http + '/api/rotation/list',{
+						data:{
+							type:1
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							if (data.code == 200) {
+
+								var homelbtHTML = '';
+								var homelbtXia = '';
+
+								homelbtHTML += `<div class="mui-slider-item mui-slider-item-duplicate">
+				  <a href="#">
+					<img src="${httpimg + data.rows[data.rows.length-1].advImg}" style="height: 200px; width: 100%;">
+				  </a>
+				</div>`
+
+								for (var i = 0 ; i < data.rows.length ; i++) {
+
+									homelbtHTML += `<div class="mui-slider-item">
+					<img src="${httpimg + data.rows[i].advImg}" style="height: 200px; width: 100%;">
+				</div>`
+									homelbtXia += `<div class="mui-indicator"></div>`
+
+								}
+
+								homelbtHTML += `<div class="mui-slider-item mui-slider-item-duplicate">
+					<img src="${httpimg + data.rows[0].advImg}" style="height: 200px; width: 100%;">
+				</div>`
+							document.getElementById('lbt1').innerHTML = homelbtHTML;
+							document.getElementById('lbt2').innerHTML = homelbtXia;
+							}
+
+							mui('#slider').slider({interval:3000})
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				HomeLBT()
+
+				function TongZhi(){
+
+					mui.ajax(http + '/api/community/community_notice/list',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							console.log(data.code)
+							if (data.code != 200) return;
+
+							var titles = '';
+							for (var i = 0; i < data.rows.length; i++) {
+								titles += data.rows[i].contentNotice + '　　';
+							}
+
+							document.getElementById('TongZhi').innerHTML =
+								`<marquee scrollamount="4" style=" color: #000000; font-size: 10px;">${titles}</marquee>`
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				TongZhi()
+
+				function Jgg(){
+
+					var JGGYeiNMian = [{
+						name:'开门',
+						id:'li_1',
+
+					},
+					{
+						name:'我的房屋',
+						id:'li_2',
+
+					},
+					{
+						name:'我的车位',
+						id:'li_3',
+
+					},
+					{
+						name:'物业缴费',
+						id:'li_4',
+
+					},
+					{
+						name:'扫码取件',
+						id:'li_5',
+
+					},
+					{
+						name:'社区公告',
+						id:'li_6',
+
+					},
+					{
+						name:'社区电话',
+						id:'li_7',
+
+					},
+					{
+						name:'投诉建议',
+						id:'li_8',
+
+					}
+					]
+					var JGGHTML = '';
+					for (var i = 0 ; i < JGGYeiNMian.length ; i++) {
+					JGGHTML += `<li class="mui-table-view-cell mui-media mui-col-xs-3">
+					<a href="#" id="${JGGYeiNMian[i].id}">
+						<img src="../IMG/4bc0706dd1a65.jpg" style="height: 30px; width: 30px; border-radius: 50px;">
+						<div class="mui-media-body" style="font-size: 13px;">${JGGYeiNMian[i].name}</div>
+					</a>
+				</li>`
+					}
+					document.getElementById('jgg').innerHTML = JGGHTML;
+				document.getElementById('li_1').addEventListener('tap',function(){
+					mui.openWindow('li_1.html')
+				});
+				document.getElementById('li_2').addEventListener('tap',function(){
+					mui.openWindow('li_2.html')
+				});
+				document.getElementById('li_3').addEventListener('tap',function(){
+					mui.openWindow('li_3.html')
+				});
+				document.getElementById('li_4').addEventListener('tap',function(){
+					mui.openWindow('li_4.html')
+				});
+				document.getElementById('li_5').addEventListener('tap',function(){
+					mui.openWindow('li_5.html')
+				});
+				document.getElementById('li_6').addEventListener('tap',function(){
+					mui.openWindow('li_6.html')
+				});
+				document.getElementById('li_7').addEventListener('tap',function(){
+					mui.openWindow('li_7.html')
+				});
+				document.getElementById('li_8').addEventListener('tap',function(){
+					mui.openWindow('li_8.html')
+				});
+
+				}
+				Jgg()
+
+				function SeiQuHuodONG(){
+
+					mui.ajax(http + '/api/community/community-activity/activity-list',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+
+							if (data.code == 200) {
+
+								var HUODongHTML = '';
+								for (var i = 0 ; i < data.rows.length ; i++) {
+
+									HUODongHTML += `<img src="${httpimg + data.rows[i].imgUrl}" style="height: 150px; padding-left: 100px;">
+				<div>
+					<h4>${data.rows[i].titile}</h4>
+					<h5 style="color: #000000;">${data.rows[i].comDistance}</h5>
+					<h5 style="color: #000000;">${data.rows[i].comCategory}</h5>
+				</div>`
+
+								}
+								document.getElementById('SeiQuhUODong').innerHTML = HUODongHTML
+
+							}
+
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				SeiQuHuodONG()
+
+				function DongTai(){
+
+					mui.ajax(http + '/api/community/community-activity/dynamic-list',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+							if (data.code == 200) {
+
+								DongTAiQuan = data.rows;
+								DongTAiWUTIAo = 5;
+								GhengXing()
+
+							}
+
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+					function GhengXing(){
+
+						if(DongTAiWUTIAo > DongTAiQuan.length){
+							DongTAiWUTIAo = DongTAiQuan.length
+						}
+
+						var DongTaiHGTML = '';
+						for (var i = 0 ; i < DongTAiWUTIAo ; i++) {
+
+							DongTaiHGTML += `<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<img class="mui-media-object mui-pull-right" src="${httpimg + DongTAiQuan[i].imgUrl}">
+						<div class="mui-media-body">
+							<h4>${DongTAiQuan[i].titile}</h4>
+							<h5 style="color: #000000;">${DongTAiQuan[i].number}</h5>
+							<p class="mui-ellipsis">${DongTAiQuan[i].createTime}</p>
+						</div>
+					</a>
+				</li>`
+
+						}
+						document.getElementById('DongTai').innerHTML = DongTaiHGTML
+
+					}
+
+					document.getElementById('GengXinbg').addEventListener('tap',function(){
+
+						DongTAiWUTIAo += 5;
+						GhengXing()
+						if(DongTAiWUTIAo > DongTAiQuan.length){
+							this.innerHTML = '更新成功'
+						}
+
+					})
+
+				}
+				DongTai()
+
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">帖子详情</h1>
+		</header>
+
+		<div class="mui-content">
+			<div id="XiangQing"></div>
+			<br>
+			<div style="padding: 5px; position: relative;">
+				<div style="font-size: 20px; color: #0062CC;">评论：</div>
+				<div id="ZhongShu">
+					<p style="position: absolute;right: 8%;top: 5px;">人数:</p>
+				</div>
+			</div>
+
+			<div id="QingLuenYei" style="position: relative; padding: 5px; background-color: #BBBBBB; border-radius: 50px;"></div>
+		</div>
+
+		<nav class="mui-bar mui-bar-tab" style="background-color: rgba(255, 255, 255, 0.5);">
+			<button id="PingLujen" type="button" class="mui-btn mui-btn-blue">发表评论</button>
+		</nav>
+
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				var extra = plus.webview.currentWebview().extra || {}
+				var id = extra.id || plus.storage.getItem('TIaoZuanID')
+				console.log(id)
+
+				mui.ajax(http + '/api/community/friendly_neighborhood/' + id, {
+					data: {},
+					headers: {
+						'Authorization': localStorage.getItem('token')
+					},
+					dataType: 'json',
+					type: 'get',
+					timeout: 10000,
+					success: function (data) {
+						if (data.code == 200) {
+							var XiangQingHTML = ''
+							XiangQingHTML += `<div style="background-color: #cac9bc; border-radius: 50px;">
+					<img src="${httpimg + data.data.imgUrl}" style="width: 100%; height: 200px; border-radius: 50px; padding: 3px;">
+					<div style="padding: 10px; position: relative;">
+						<h4>题栏:${data.data.title}</h4>
+						<h5>发布人:${data.data.publishName}</h5>
+						<h5>发布时间:${data.data.publishTime}</h5>
+						<h5>发布内容:${data.data.publishContent}</h5>
+					</div>
+				</div>`
+							document.getElementById('XiangQing').innerHTML = XiangQingHTML
+						}
+					},
+					error: function (xhr, type, errorThrown) {}
+				});
+
+				function loadComments() {
+					mui.ajax(http + '/api/community/friendly_neighborhood/' + id, {
+						data: {},
+						headers: {
+							'Authorization': localStorage.getItem('token')
+						},
+						dataType: 'json',
+						type: 'get',
+						timeout: 10000,
+						success: function (data) {
+							console . log ( JSON . stringify (data));
+							console.log(data.code)
+							if (data.code == 200) {
+
+								var list = data.data.userComment || [];
+								var QingLuenHTML = '';
+
+								for (var i = 0; i < list.length; i++) {
+									var c = list[i];
+									QingLuenHTML += `<div style="padding: 8px; background-color: #555555; border-radius: 50px; margin-bottom: 8px;">
+					<div style="position: relative; height: 32px;">
+						<img src="${httpimg + c.avater}" style="border-radius: 50%; height: 30px; width: 30px;">
+						<h5 style="position: absolute; left: 38px; top: 2px; color: #000000; font-size: 16px;">${c.userName}</h5>
+						<h5 style="position: absolute; right: 5%; top: 2px;">${c.pulishTime}</h5>
+					</div>
+					<h5 style="margin: 6px 0;">评论：${c.content}</h5>
+					<p style="text-align: right; margin: 0;">点赞：${c.likeNum}</p>
+				</div>`
+								}
+
+								document.getElementById('QingLuenYei').innerHTML = QingLuenHTML
+
+								document.getElementById('ZhongShu').innerHTML =
+									'<p style="position: absolute;right: 8%;top: 5px;">评论数：' + list.length + '</p>'
+							}
+						},
+						error: function (xhr, type, errorThrown) {}
+					});
+				}
+				loadComments();
+
+				document.getElementById('PingLujen').addEventListener('tap', function () {
+
+					plus.nativeUI.prompt('请输入评论内容', function (e) {
+
+						if (e.index == 1) {
+
+							var text = (e.value || '').trim();
+							if (text == '') {
+								mui.toast('评论内容不能为空');
+								return;
+							}
+
+							mui.ajax(http + '/api/community/friendly_neighborhood/add/comment', {
+								data: {
+									neighborhoodId: id,
+									content : text
+								},
+								headers: {
+									'Content-Type': 'application/json',
+									'Authorization': localStorage.getItem('token')
+								},
+								dataType: 'json',
+								type: 'post',
+								timeout: 10000,
+								success: function (data) {
+									console.log('评论更新post' + data.code)
+									if (data.code == 200) {
+										mui.toast('评论成功');
+										loadComments();
+									} else {
+										mui.toast('评论失败');
+									}
+								},
+								error: function (xhr, type, errorThrown) {
+									mui.toast('网络错误');
+								}
+							});
+						}
+					}, '发表评论', '', ['取消', '确定']);
+				});
+			})
+		</script>
+	</body>
+
+</html>
