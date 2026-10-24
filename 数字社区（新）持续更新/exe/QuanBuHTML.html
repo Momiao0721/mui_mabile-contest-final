@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" id="BiaoTi">
+			
+			
+		</header>
+		
+		<div class="mui-content">
+			
+			<div id="XiangQing" style="border-radius: 50px; background-color: #f7f7f7;">
+				
+				
+				
+			</div>
+			
+		</div>
+		<nav class="mui-bar mui-bar-tab" id="DiBu">
+			
+		</nav>
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				var extra = plus.webview.currentWebview().extras || {}
+				var id = plus.storage.getItem('QuanBuID') || extra.id
+
+				function BiaoTi(){
+
+					mui.ajax(http + '/api/community/community_notice/' + id,{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'get',
+						timeout:10000,
+						success:function(data){
+
+							if (data.code == 200) {
+
+								var BiaoTi = '';
+								BiaoTi += `<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+								<h1 class="mui-title">${data.data.noticeTitle}</h1>`
+								document.getElementById('BiaoTi').innerHTML = BiaoTi
+
+							}
+
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				BiaoTi()
+
+				function XiangQingH(){
+
+					mui.ajax(http + '/api/community/community_notice/' + id,{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'GET',
+						timeout:10000,
+						success:function(data){
+
+							if(data.code == 200){
+
+								var XiangQingHTML = '';
+								XiangQingHTML += `<div style="border-radius: 50PX; padding: 10PX;">
+
+					<h2 style="color: #000000;">${data.data.noticeTitle}</h2>
+
+					<div id="">
+						<h4>${data.data.createTime}</h4>
+						<h4>${data.data.contentNotice}</h4>
+					</div>
+
+				</div>`
+								document.getElementById('XiangQing').innerHTML = XiangQingHTML
+							}
+
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				XiangQingH()
+
+				function DiBu(){
+
+					mui.ajax(http + '/api/community/community_notice/' + id,{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'GET',
+						timeout:10000,
+						success:function(data){
+
+							if (data.code == 200) {
+
+								var XiaHTML = '';
+								XiaHTML += `<h5>联系电话:${data.data.phone}</h5>
+			<h6>${data.data.releaseUnit}</h6>`
+
+								document.getElementById('DiBu').innerHTML = XiaHTML
+							}
+
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				DiBu()
+			})
+		</script>
+	</body>
+
+</html>

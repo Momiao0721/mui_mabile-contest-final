@@ -28,7 +28,7 @@
 		</div>
 
 		<nav class="mui-bar mui-bar-tab" style="background-color: rgba(255, 255, 255, 0.5);">
-			<button id="PingLujen" type="button" class="mui-btn mui-btn-blue">发表评论</button>
+			<button id="PingLujen" type="button" class="mui-btn mui-btn-blue" style="position: absolute;left: 40%;">发表评论</button>
 		</nav>
 
 		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
@@ -37,9 +37,8 @@
 			mui.init()
 			mui.plusReady(function () {
 
-				var extra = plus.webview.currentWebview().extra || {}
+				var extra = plus.webview.currentWebview().extras || {}
 				var id = extra.id || plus.storage.getItem('TIaoZuanID')
-				console.log(id)
 
 				mui.ajax(http + '/api/community/friendly_neighborhood/' + id, {
 					data: {},
@@ -77,8 +76,6 @@
 						type: 'get',
 						timeout: 10000,
 						success: function (data) {
-							console . log ( JSON . stringify (data));
-							console.log(data.code)
 							if (data.code == 200) {
 
 								var list = data.data.userComment || [];
@@ -121,10 +118,10 @@
 							}
 
 							mui.ajax(http + '/api/community/friendly_neighborhood/add/comment', {
-								data: {
+								data: JSON.stringify({
 									neighborhoodId: id,
-									content : text
-								},
+									content: text
+								}),
 								headers: {
 									'Content-Type': 'application/json',
 									'Authorization': localStorage.getItem('token')
@@ -133,7 +130,6 @@
 								type: 'post',
 								timeout: 10000,
 								success: function (data) {
-									console.log('评论更新post' + data.code)
 									if (data.code == 200) {
 										mui.toast('评论成功');
 										loadComments();

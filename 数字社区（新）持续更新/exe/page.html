@@ -71,7 +71,12 @@
 		})
 		mui.plusReady(function () {
 
-			function YeiMian(id){
+			function YeiMian(id) {
+				var items = document.querySelectorAll('.mui-tab-item')
+				for (var i = 0; i < items.length; i++) {
+					items[i].classList.remove('mui-active')
+				}
+				document.getElementById(id).classList.add('mui-active')
 				plus.webview.getWebviewById(id).show()
 			}
 			document.getElementById('sjfx').addEventListener('tap',function(){
