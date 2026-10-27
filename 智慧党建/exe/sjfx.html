@@ -1,0 +1,208 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="color: red;">
+			<h1 class="mui-title">数据分析</h1>
+		</header>
+		
+		<div class="mui-content">
+			
+		<div style="padding: 10px;" class="mui-content">
+			
+			<div id="TiaoXingTu" style="width: 100%; height: 200px;"></div>
+			
+			<div id="ZeiXianTu" style="width: 100%; height: 200px;"></div>
+			
+			<div id="BingTu" style="height: 300px; width: 100%;"></div>
+			
+		</div>
+		</div>
+		
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/echarts.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				var TiaoXiang = echarts.init(document.getElementById('TiaoXingTu'))
+				var ZeiXianTtu = echarts.init(document.getElementById('ZeiXianTu'))
+				var Bing = echarts.init(document.getElementById('BingTu'))
+
+				mui.ajax(http + '/api/data/comment/list_2',{
+					data:{
+
+					},
+					headers:{
+						'Authorization':localStorage.getItem('token')
+					},
+
+					dataType:'json',
+					type:'GET',
+					timeout:10000,
+					success:function(data){
+						if (data.code == 200) {
+
+							var d = data.data
+
+							var lineOption = {
+							    color:['#ba0508','#364430'],
+							    legend: {
+							        data: ['女性评论数统计', '男性评论数统计'],
+							        left:"center",
+							    },
+							    grid:{
+							        show:true
+							    },
+							    xAxis: {
+							        type: 'category',
+							        data: d.name,
+							        splitLine:{ show: true },
+							    },
+							    yAxis: {
+							        type: 'value',
+							        min:0,
+							    },
+
+							    series: [{
+							        name: '女性评论数统计',
+							        data: d.woman,
+							        type: 'bar'
+							    },
+							    {
+							        name: '男性评论数统计',
+							        data: d.man,
+							        type: 'bar'
+							    }
+							  ]
+							}
+
+							TiaoXiang.setOption(lineOption)
+
+						}
+					},
+					error:function(xhr,type,errorThrown){
+
+					}
+				});
+
+				mui.ajax(http + '/api/read/book/list_1',{
+					data:{
+
+					},
+					headers:{
+						'Authorization':localStorage.getItem('token')
+					},
+
+					dataType:'json',
+					type:'get',
+					timeout:10000,
+					success:function(data){
+						if(data.code == 200){
+
+							var d = data.data;
+
+							var lineOption = {
+							    color:["#00b7ba"],
+							    legend:{
+							        data:['每月阅读书籍数量'],
+							        left: 'center',
+							    },
+							    xAxis: {
+							        splitLine: {
+							            show: true
+							        },
+							        type: 'category',
+							        data: d.name,
+
+							    },
+							    yAxis: {
+							        min: 0,
+							        type: 'value'
+							    },
+							    series: [{
+							        name:'每月阅读书籍数量',
+							        data: d.value,
+							        type: 'line'
+							    }]
+							}
+							ZeiXianTtu.setOption(lineOption)
+						}
+					},
+					error:function(xhr,type,errorThrown){
+
+					}
+				});
+
+				mui.ajax(http + '/api/read/book/list/type_1',{
+					data:{
+
+					},
+					headers:{
+						'Authorization':localStorage.getItem('token')
+					},
+
+					dataType:'json',
+					type:'GET',
+					timeout:10000,
+					success:function(data){
+
+						if (data.code == 200) {
+
+							var d = data.data;
+
+							var BingBIng = []
+
+							for (var i = 0 ; i < d.name.length ; i++) {
+
+								BingBIng.push({
+									value: d.count[i],
+									name: d.name[i]
+								})
+
+							}
+
+							var pieOption = {
+							    color:['red','green','#75ba75','#baa9b1','#ba7b3c','#5440ba'],
+							    tooltip: {
+							        trigger: 'item'
+							    },
+							    legend: {
+							        bottom: '0',
+							        left: 'center',
+							        icon:'circle',
+							        data:d.name
+							    },
+							    series: [{
+							        type: 'pie',
+							        radius: '30%',
+							            normal: {
+							                show: true,
+							                formatter: '{b},{d}%',
+							        },
+							        data:BingBIng,
+							    }
+								]
+							}
+							Bing.setOption(pieOption)
+						}
+
+					},
+					error:function(xhr,type,errorThrown){
+
+					}
+				});
+
+			})
+		</script>
+	</body>
+
+</html>

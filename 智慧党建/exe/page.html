@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" id="dyxx">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">党员学习</span>
+			</a>
+			<a class="mui-tab-item" id="dydt">
+				<span class="mui-icon mui-icon-phone"></span>
+				<span class="mui-tab-label">党建动态</span>
+			</a>
+			<a class="mui-tab-item" id="home">
+				<span class="mui-icon mui-icon-email"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" id="sjfx">
+				<span class="mui-icon mui-icon-gear"></span>
+				<span class="mui-tab-label">数据分析</span>
+			</a>
+			<a class="mui-tab-item mui-active" id="syzx">
+				<span class="mui-icon mui-icon-gear"></span>
+				<span class="mui-tab-label">党员中心</span>
+			</a>
+		</nav>
+		
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				subpages:[{
+				  url:'home.html',
+			      id:'home',
+			      styles:{
+			        top:'0px',
+					bottom:'50px'
+			      },
+			      extras:{}
+				},
+				{
+				  url:'dyxx.html',
+				  id:'dyxx',
+				  styles:{
+				    top:'0px',
+					bottom:'50px'
+				  },
+				  extras:{}
+				},
+				{
+				  url:'dydt.html',
+				  id:'dydt',
+				  styles:{
+				    top:'0px',
+					bottom:'50px'
+				  },
+				  extras:{}
+				},
+				{
+				  url:'sjfx.html',
+				  id:'sjfx',
+				  styles:{
+				    top:'0px',
+					bottom:'50px'
+				  },
+				  extras:{}
+				},
+				{
+				  url:'syzx.html',
+				  id:'syzx',
+				  styles:{
+				    top:'0px',
+					bottom:'50px'
+				  },
+				  extras:{}
+				},
+				]
+			})
+			mui.plusReady(function () {
+
+				function YeiMian(id){
+
+					plus.webview.getWebviewById(id).show()
+				}
+
+				document.getElementById('home').addEventListener('tap',function(){
+					YeiMian('home')
+				})
+
+				document.getElementById('dyxx').addEventListener('tap',function(){
+					YeiMian('dyxx')
+				})
+
+				document.getElementById('dydt').addEventListener('tap',function(){
+					YeiMian('dydt')
+				})
+
+				document.getElementById('sjfx').addEventListener('tap',function(){
+					YeiMian('sjfx')
+				})
+				document.getElementById('syzx').addEventListener('tap',function(){
+					YeiMian('syzx')
+				})
+
+			})
+		</script>
+	</body>
+
+</html>

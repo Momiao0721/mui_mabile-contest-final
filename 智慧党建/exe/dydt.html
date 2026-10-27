@@ -1,0 +1,237 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="height: 100px; background-color: #d9001b">
+			<img src="../IMG/4bc0706dd1a65.jpg" style="top: 5px; position: absolute; height: 30px; width: 30px;">
+			<h3 style="position: relative;left: 35px; top: 5px;">党员动态</h3>
+			<div id="" style="position: relative;top: 10px;">
+					<input type="text" class="mui-input-clear" placeholder="搜索动态">
+			</div>
+		</header>
+		
+		<div class="mui-content" style="position: relative;top: 50px;">
+			
+			
+			<div id="" style="padding: 10px;">
+				
+				<div id="slider" class="mui-slider" >
+				  <div class="mui-slider-group mui-slider-loop" id="lbt1"></div>
+					
+				
+					
+					
+					
+					
+					
+				  <div class="mui-slider-indicator" id="lbt2"></div>
+					
+				</div>
+				
+			</div>
+			
+	
+				<div id="" style="padding: 10px;">
+					<p style="position: absolute; right: 5%; color: #007AFF;" id="JIChengDongTa">查看更多</p>
+					<p style="font-size: 20px;">|基层动态</p>
+					
+					<div id="DongTai" style="height: 100px; background-color: #ffffff; border-radius: 20px; overflow: hidden;">
+						
+					</div>
+					
+				</div>
+			
+			
+				<div id="" style="padding: 10px;">
+					
+					<p style="position: absolute; right: 5%; color: #007AFF;" id="GengDuo">查看更多</p>
+					<p style="font-size: 20px;">|组织活动</p>
+					
+					
+					<ul class="mui-table-view" id="HD">
+						
+						
+						
+					</ul>
+					
+				</div>
+				
+				
+		</div>
+		
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				function LBT(){
+
+				mui.ajax(http + '/api/building/banner/list',{
+					data:{
+
+					},
+					headers:{
+						'Authorization':localStorage.getItem('token')
+					},
+
+					dataType:'json',
+					type:'GET',
+					timeout:10000,
+					success:function(data){
+
+						if (data.code == 200) {
+
+							var lbtHTML = '';
+							var lbtXia = '';
+
+							lbtHTML += `<div class="mui-slider-item mui-slider-item-duplicate">
+					  <a href="#">
+						<img src="${httpimg + data.rows[data.rows.length-1].imgUrl}" style="width: 100%; height: 150px; object-fit: cover;">
+					  </a>
+					</div>`
+
+							for (var i = 0 ; i< data.rows.length ; i++) {
+
+								lbtHTML += `<div class="mui-slider-item">
+					  <a href="#">
+						<img src="${httpimg + data.rows[i].imgUrl}" style="width: 100%; height: 150px; object-fit: cover;">
+					  </a>
+					</div>`
+								lbtXia += `<div class="mui-indicator"></div>`
+							}
+
+							lbtHTML += `<div class="mui-slider-item mui-slider-item-duplicate">
+					  <a href="#">
+						<img src="${httpimg + data.rows[0].imgUrl}" style="width: 100%; height: 150px; object-fit: cover;">
+					  </a>
+					</div>`
+
+							document.getElementById('lbt1').innerHTML = lbtHTML;
+							document.getElementById('lbt2').innerHTML = lbtXia;
+
+						}
+
+						mui('.mui-slider').slider({interval:3000})
+
+					},
+					error:function(xhr,type,errorThrown){
+
+					}
+				});
+
+				}
+				LBT()
+
+				function DongTai(){
+
+					mui.ajax(http + '/api/hero/list',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'GET',
+						timeout:10000,
+						success:function(data){
+							if (data.code == 200) {
+
+								if (!data.rows || data.rows.length == 0) return;
+
+								var r = data.rows[0];
+								var DongTai = '';
+
+								DongTai += `<div style="padding: 10px; position: relative;">
+						<img class="mui-pull-right" src="${httpimg + r.imgUrl}" style="height: 70px; width: 50px; border-radius: 8px;">
+						<h4 style="margin: 0 0 5px 0;">${r.name}</h4>
+						<p style="margin: 0; font-size: 13px; color: #666; overflow: hidden; height: 40px;" class="mui-ellipsis-2">${r.introduction}</p>
+					</div>`
+
+								document.getElementById('DongTai').innerHTML = DongTai;
+							}
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				DongTai()
+				document.getElementById('GengDuo').addEventListener('tap',function(){
+
+					mui.openWindow({
+						url:'GengDuoList.html',
+						id:'GengDuoList'
+					})
+
+				})
+
+				function HuoDong(){
+
+					mui.ajax(http + '/api/activity/list',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'GET',
+						timeout:10000,
+						success:function(data){
+
+							if (data.code == 200) {
+
+								var HongDongHTML = '';
+								var count = Math.min(data.rows.length, 3);
+
+								for (var i = 0 ; i < count ; i++) {
+
+									HongDongHTML += `<li class="mui-table-view-cell mui-media">
+								<img src="${httpimg + data.rows[i].imgUrl}" style="height: 200px; width: 100%;">
+							<a href="javascript:;">
+								<div class="mui-media-body">
+									${data.rows[i].activityName}
+									<p class="mui-ellipsis">${data.rows[i].activityDetail}</p>
+								</div>
+							</a>
+						</li>`
+
+								}
+								document.getElementById('HD').innerHTML = HongDongHTML
+							}
+
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				HuoDong()
+
+				document.getElementById('JIChengDongTa').addEventListener('tap',function(){
+
+					mui.openWindow({
+						url:'JIChengDongTa.html',
+						id:'JIChengDongTa'
+					})
+
+				})
+
+			})
+		</script>
+	</body>
+
+</html>

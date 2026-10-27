@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color: #be0f12;">
+			<h1 class="mui-title">党员中心</h1>
+		</header>
+		
+		<div class="mui-content">
+			
+		<div style="padding: 10px;" id="WoDei">
+			
+			
+			
+		</div>
+		<br>
+		<div id="" style="padding: 10px;">
+			
+		<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						学习记录
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						 个人档案
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="MiMai">
+					<a class="mui-navigate-right">
+						 修改密码
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="TueiCu">
+					<a class="mui-navigate-right">
+						 点击退出
+					</a>
+				</li>
+			</ul>
+		</div>
+		</div>
+		
+		<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function () {
+
+				function WoDeJVAVS(){
+
+					mui.ajax(http + '/api/common/user/getInfo',{
+						data:{
+
+						},
+						headers:{
+							'Authorization':localStorage.getItem('token')
+						},
+
+						dataType:'json',
+						type:'GET',
+						timeout:10000,
+						success:function(data){
+							if (data.code == 200) {
+
+								var WoDeHTML = '';
+								WoDeHTML += `<div style="background-color: #be0f12; position: relative;top: 5px; height: 80px; padding: 10px; border-radius: 10px;">
+							<img class="mui-media-object mui-pull-left" src="${httpimg + data.data.avatar}" style="height: 50px; width: 50px; border-radius: 50px;">
+							<div class="mui-media-body">
+								${data.data.userName}
+								<p class="mui-ellipsis">我爱中国喵~~~</p>
+							</div>
+			</div>`
+
+								document.getElementById('WoDei').innerHTML = WoDeHTML
+							}
+						},
+						error:function(xhr,type,errorThrown){
+
+						}
+					});
+
+				}
+				WoDeJVAVS()
+
+				document.getElementById('MiMai').addEventListener('tap',function(){
+
+					mui.openWindow({
+						url:'GemGaiMiMai.html',
+						id:'GemGaiMiMai'
+					})
+
+				})
+
+				document.getElementById('TueiCu').addEventListener('tap',function(){
+
+					mui.confirm('你确定退出登录么','退出登录',['取消','确认'],function (e) {
+						e.index
+						if (e.index != 0) {
+
+							mui.ajax(http + '/api/logout',{
+								data:{
+
+								},
+								headers:{
+									'Authorization':localStorage.getItem('token')
+								},
+
+								dataType:'json',
+								type:'post',
+								timeout:10000,
+								success:function(data){
+
+									if(data.code == 200){
+										mui.toast('退出成功')
+										mui.back()
+									}
+
+								},
+								error:function(xhr,type,errorThrown){
+
+								}
+			 				});
+
+						} else{
+							mui.toast('你点击了取消')
+						}
+					},'div')
+
+				})
+
+			})
+		</script>
+	</body>
+
+</html>
